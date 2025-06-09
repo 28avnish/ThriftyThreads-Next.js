@@ -1,0 +1,45 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../generated/prisma/client.js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMDFKWEE1OVEzOUJZN0ZBNTJCTUhHTTM0QTEiLCJ0ZW5hbnRfaWQiOiJhYzkxZGRlOTQzYmY4NmM4YWZiNmZkOTViNzYyZDU1MGQxNDE4MjNjNmExNDQ2YzdkZmUxYTQyNjEzOTdmZTQyIiwiaW50ZXJuYWxfc2VjcmV0IjoiMmRhYzg4MWQtNDM0Ni00NGVhLTkzOTAtZWRiYTI3N2U5MWYwIn0.mIv6U0N_cplAozZr2F86bbIvaMdPfllXtDCkFEjyFxI"
+}
+
+// ===== User Models =====
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+}
+
+// ===== Product Models =====
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  productName   String
+  productSlug   String
+  mainImage     String?
+  productImages String? // You can use JSON or stringified array
+  discount      Float?
+  category      String?
+  description   String?
+  prices        Price[] // 👈 Relation to Price model
+  created_at    DateTime @default(now())
+}
+
+model Price {
+  id       Int    @id @default(autoincrement())
+  size     String
+  price    Float
+  maxPrice Float?
+
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+}
