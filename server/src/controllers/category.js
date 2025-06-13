@@ -2,10 +2,9 @@ import { uploaderCloudinary } from "../config/cloudinary.js";
 import prisma from "../config/db.js";
 import errorResponse, { asyncHandler } from "../utils/asyncHandler.js";
 
-// @route - POST api/v1/product
+// @route - POST api/v1/category
 
-export const createProduct = asyncHandler(async (req, res, next) => {
-  const { images, image } = req?.files;
+export const createCategory = asyncHandler(async (req, res, next) => {
   const {
     productName,
     productSlug,
@@ -14,14 +13,6 @@ export const createProduct = asyncHandler(async (req, res, next) => {
     description,
     prices,
   } = req.body;
-
-  const singleImage = await uploaderCloudinary(image[0].path);
-  const multipleImages = await Promise.all(
-    images.map((file) => uploaderCloudinary(file.path))
-  );
-
-  // Parse price array if sent as JSON string (e.g., via formData)
-  const parsedPrices = typeof prices === "string" ? JSON.parse(prices) : prices;
 
   await prisma.product.create({
     data: {

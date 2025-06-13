@@ -13,36 +13,33 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-// app.use(
-//   cors(
-//     process.env.NODE_ENV === "development"
-//       ? {
-//           origin: [
-//             "http://localhost:5173",
-//             "http://localhost:3000"
-//           ],
-//           credentials: true,
-//           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
-//           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-//           exposedHeaders: ["*", "Authorization"],
-//         }
-//       : {
-//           origin: [
-//             "http://localhost:5173",
-//           ],
-//           credentials: true,
-//           methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
-//           allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
-//           exposedHeaders: ["*", "Authorization"],
-//         }
-//   )
-// );
+app.use(
+  cors(
+    process.env.NODE_ENV === "development"
+      ? {
+          origin: ["http://localhost:5173", "http://localhost:3000"],
+          credentials: true,
+          methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
+          allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+          exposedHeaders: ["*", "Authorization"],
+        }
+      : {
+          origin: ["http://localhost:5173", "http://localhost:3000"],
+          credentials: true,
+          methods: ["GET", "PUT", "POST", "PATCH", "DELETE"],
+          allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+          exposedHeaders: ["*", "Authorization"],
+        }
+  )
+);
 
 //@@Desc:-----------------importing routers---------------
 import authRoutes from "./src/routes/auth.js";
+import productRoutes from "./src/routes/product.js";
 
 // @@Desc:-----------------route section-----------------
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/product", productRoutes);
 
 app.use("/", (req, res) =>
   res.send("----------WELCOME TO THRIFTY THREADS----------")

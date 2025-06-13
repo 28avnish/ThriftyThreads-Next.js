@@ -11,7 +11,7 @@ export const newUser = asyncHandler(async (req, res, next) => {
   });
 
   if (isUserExist) {
-    return next(new errorResponse("Email already exists."));
+    return next(new errorResponse("Email already exists.", 409));
   }
 
   await prisma.user.create({ data: req.body });
